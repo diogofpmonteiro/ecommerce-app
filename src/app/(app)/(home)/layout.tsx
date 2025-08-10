@@ -21,6 +21,7 @@ export default async function HomeLayout({ children }: HomeLayoutProps) {
         exists: false, // fetch top-level categories only
       },
     },
+    sort: "name",
   });
 
   const formattedData: CustomCategory[] = data.docs.map((category) => ({
