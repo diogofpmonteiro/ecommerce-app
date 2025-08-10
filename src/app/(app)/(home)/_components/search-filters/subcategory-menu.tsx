@@ -1,8 +1,8 @@
-import { Category } from "@/payload-types";
 import Link from "next/link";
+import { CustomCategory } from "../../types";
 
 interface SubcategoryMenuProps {
-  category: Category; // TODO: update
+  category: CustomCategory;
   isOpen: boolean;
   position: { top: number; left: number };
 }

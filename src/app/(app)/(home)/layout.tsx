@@ -4,6 +4,7 @@ import { Navbar } from "./_components/navbar";
 import { SearchFilters } from "./_components/search-filters";
 import configPromise from "@payload-config";
 import { Category } from "@/payload-types";
+import { CustomCategory } from "./types";
 
 interface HomeLayoutProps {
   children: React.ReactNode;
@@ -22,7 +23,7 @@ export default async function HomeLayout({ children }: HomeLayoutProps) {
     },
   });
 
-  const formattedData = data.docs.map((category) => ({
+  const formattedData: CustomCategory[] = data.docs.map((category) => ({
     ...category,
     subcategories: (category.subcategories?.docs ?? []).map((subcategory) => ({
       ...(subcategory as Category), // we can infer the type here because of depth: 1
