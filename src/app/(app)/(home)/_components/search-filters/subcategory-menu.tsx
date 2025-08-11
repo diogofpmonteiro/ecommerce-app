@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { CustomCategory } from "../../types";
+import { CategorySingleOutput } from "@/modules/categories/types";
 
 interface SubcategoryMenuProps {
-  category: CustomCategory;
+  category: CategorySingleOutput;
   isOpen: boolean;
   position: { top: number; left: number };
 }
