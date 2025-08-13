@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { registerSchema } from "../../schemas";
 import z from "zod";
 import Link from "next/link";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { trpc } from "@/trpc/client";
 
 type SignUpFormValues = z.infer<typeof registerSchema>;
 
@@ -17,6 +18,7 @@ const poppins = Poppins({ subsets: ["latin"], weight: ["700"] });
 
 export const SignUpView = () => {
   const form = useForm<SignUpFormValues>({
+    mode: "all",
     resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
@@ -26,8 +28,13 @@ export const SignUpView = () => {
   });
 
   const onSubmit = (values: SignUpFormValues) => {
-    console.log(values);
+    // todo: check how to properly implement this with most recent version
+    trpc.auth.register.useMutation().mutate(values);
   };
+
+  const username = form.watch("username");
+  const usernameErrors = form.formState.errors.username;
+  const showPreview = username && !usernameErrors;
 
   return (
     <div className='grid grid-cols-1 lg:grid-cols-5'>
@@ -55,10 +62,47 @@ export const SignUpView = () => {
                   <FormControl>
                     <Input placeholder='Enter your username' {...field} />
                   </FormControl>
+                  <FormDescription className={cn("hidden", showPreview && "block")}>
+                    Your store will be available at&nbsp;
+                    {/* // TODO: use proper method to generate preview url */}
+                    <strong>{username}</strong>
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <FormField
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='text-base'>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Enter your email' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name='password'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='text-base'>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Enter your password' {...field} type='password' />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type='submit'
+              size='lg'
+              variant='elevated'
+              // disabled={}
+              className='bg-black text-white hover:bg-pink-400 hover:text-primary'>
+              Sign Up
+            </Button>
           </form>
         </Form>
       </div>
