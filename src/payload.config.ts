@@ -21,6 +21,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  // cookiePrefix: "ecomm-app", // we could add a cookie name prefix here
   collections: [Users, Media, Categories],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
