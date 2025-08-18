@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CategorySingleOutput } from "@/modules/categories/types";
+import { DEFAULT_BG_COLOR } from "@/modules/home/constants";
 
 interface SubcategoryMenuProps {
   category: CategorySingleOutput;
@@ -10,7 +11,7 @@ interface SubcategoryMenuProps {
 export const SubcategoryMenu = ({ category, isOpen, position }: SubcategoryMenuProps) => {
   if (!isOpen || !category.subcategories || category.subcategories.length === 0) return null;
 
-  const backgroundColor = category.color || "#F5F5F5";
+  const backgroundColor = category.color || DEFAULT_BG_COLOR;
 
   return (
     <div className='fixed z-100' style={{ top: position.top, left: position.left }}>
