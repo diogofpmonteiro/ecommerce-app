@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { loginSchema } from "../../schemas";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { registerSchema } from "../../schemas";
 import z from "zod";
 import Link from "next/link";
 import { Poppins } from "next/font/google";
@@ -13,34 +13,44 @@ import { cn } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type SignUpFormValues = z.infer<typeof registerSchema>;
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["700"] });
 
 export const SignUpView = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const queryKey = getQueryKey(trpc.auth.session, undefined, "query");
 
-  const mutation = trpc.auth.login.useMutation({
+  const mutation = trpc.auth.register.useMutation({
     onError: (err) => {
       toast.error(err.message);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Logging in and redirecting..");
+      await queryClient.invalidateQueries({ queryKey });
       router.push("/");
     },
   });
 
-  const form = useForm<LoginFormValues>({
+  const form = useForm<SignUpFormValues>({
     mode: "all",
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
       password: "",
+      username: "",
     },
   });
 
-  const onSubmit = (values: LoginFormValues) => mutation.mutate(values);
+  const onSubmit = (values: SignUpFormValues) => mutation.mutate(values);
+
+  const username = form.watch("username");
+  const usernameErrors = form.formState.errors.username;
+  const showPreview = username && !usernameErrors;
 
   return (
     <div className='grid grid-cols-1 lg:grid-cols-5'>
@@ -53,13 +63,30 @@ export const SignUpView = () => {
               </Link>
 
               <Button asChild variant={"ghost"} size='sm' className='text-base border-none underline'>
-                <Link prefetch href='/sign-up'>
-                  Sign Up
+                <Link prefetch href='/sign-in'>
+                  Sign In
                 </Link>
               </Button>
             </div>
 
-            <h1 className='text-4xl font-medium'>Welcome back to Ecomm App</h1>
+            <h1 className='text-4xl font-medium'>Join over 1000 creators earning money on Ecomm app</h1>
+            <FormField
+              name='username'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className='text-base'>Username</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Enter your username' {...field} />
+                  </FormControl>
+                  <FormDescription className={cn("hidden", showPreview && "block")}>
+                    Your store will be available at&nbsp;
+                    {/* // TODO: use proper method to generate preview url */}
+                    <strong>{username}</strong>
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               name='email'
               render={({ field }) => (
@@ -90,7 +117,7 @@ export const SignUpView = () => {
               variant='elevated'
               disabled={mutation.isPending}
               className='bg-black text-white hover:bg-pink-400 hover:text-primary'>
-              Log in
+              Sign Up
             </Button>
           </form>
         </Form>
