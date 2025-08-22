@@ -7,14 +7,15 @@ interface Props {
   params: Promise<{ category: string }>;
 }
 
-const Page = async ({}: Props) => {
-  void trpc.products.getMany.prefetch();
+const Page = async ({ params }: Props) => {
+  const { category } = await params;
+  void trpc.products.getMany.prefetch({ categorySlug: category });
 
   return (
     <HydrateClient>
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <Suspense fallback={<ProductListSkeleton />}>
-          <ProductList />
+          <ProductList category={category} />
         </Suspense>
       </ErrorBoundary>
     </HydrateClient>

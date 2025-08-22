@@ -2,8 +2,12 @@
 
 import { trpc } from "@/trpc/client";
 
-export const ProductList = () => {
-  const [data] = trpc.products.getMany.useSuspenseQuery();
+interface Props {
+  category?: string;
+}
+
+export const ProductList = ({ category }: Props) => {
+  const [data] = trpc.products.getMany.useSuspenseQuery({ categorySlug: category });
 
   return (
     <div>
