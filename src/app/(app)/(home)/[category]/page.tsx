@@ -1,16 +1,25 @@
+import type { SearchParams } from "nuqs";
 import { ProductList, ProductListSkeleton } from "@/modules/products/ui/components/product-list";
 import { ProductFilters } from "@/modules/products/ui/components/product-filters";
 import { HydrateClient, trpc } from "@/trpc/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { loadProductFilters } from "@/modules/products/hooks/use-product-filters";
 
 interface Props {
   params: Promise<{ category: string }>;
+  searchParams: Promise<SearchParams>;
 }
 
-const Page = async ({ params }: Props) => {
+const Page = async ({ params, searchParams }: Props) => {
   const { category } = await params;
-  void trpc.products.getMany.prefetch({ categorySlug: category });
+
+  const filters = await loadProductFilters(searchParams);
+
+  void trpc.products.getMany.prefetch({
+    categorySlug: category,
+    ...filters,
+  });
 
   return (
     <HydrateClient>

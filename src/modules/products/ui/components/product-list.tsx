@@ -1,13 +1,18 @@
 "use client";
 
 import { trpc } from "@/trpc/client";
+import { useProductFilters } from "../../hooks/use-product-filters";
 
 interface Props {
   category?: string;
 }
 
 export const ProductList = ({ category }: Props) => {
-  const [data] = trpc.products.getMany.useSuspenseQuery({ categorySlug: category });
+  const [filters] = useProductFilters();
+  const [data] = trpc.products.getMany.useSuspenseQuery({
+    categorySlug: category,
+    ...filters,
+  });
 
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4'>
