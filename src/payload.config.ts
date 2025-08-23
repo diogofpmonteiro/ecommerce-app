@@ -10,6 +10,8 @@ import sharp from "sharp";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Categories";
+import { Products } from "./collections/Products";
+import { Tags } from "./collections/Tags";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -22,7 +24,7 @@ export default buildConfig({
     },
   },
   // cookiePrefix: "ecomm-app", // we could add a cookie name prefix here
-  collections: [Users, Media, Categories],
+  collections: [Users, Media, Categories, Products, Tags],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

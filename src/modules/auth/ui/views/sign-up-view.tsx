@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { registerSchema } from "../../schemas";
+import { registerSchema } from "@/modules/auth/schemas";
 import z from "zod";
 import Link from "next/link";
 import { Poppins } from "next/font/google";
