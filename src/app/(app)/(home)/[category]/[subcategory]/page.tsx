@@ -1,22 +1,24 @@
-import { ProductList, ProductListSkeleton } from "@/modules/products/ui/components/product-list";
+import { loadProductFilters } from "@/modules/products/hooks/search-params";
+import { ProductListView } from "@/modules/products/ui/views/product-list-view";
 import { HydrateClient, trpc } from "@/trpc/server";
-import { Suspense } from "react";
+import { SearchParams } from "nuqs";
 import { ErrorBoundary } from "react-error-boundary";
 
 interface Props {
   params: Promise<{ subcategory: string }>;
+  searchParams: Promise<SearchParams>;
 }
 
-const Page = async ({ params }: Props) => {
+const Page = async ({ params, searchParams }: Props) => {
   const { subcategory } = await params;
-  void trpc.products.getMany.prefetch({ categorySlug: subcategory });
+  const filters = await loadProductFilters(searchParams);
+
+  void trpc.products.getMany.prefetch({ categorySlug: subcategory, ...filters });
 
   return (
     <HydrateClient>
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
-        <Suspense fallback={<ProductListSkeleton />}>
-          <ProductList category={subcategory} />
-        </Suspense>
+        <ProductListView category={subcategory} />
       </ErrorBoundary>
     </HydrateClient>
   );
