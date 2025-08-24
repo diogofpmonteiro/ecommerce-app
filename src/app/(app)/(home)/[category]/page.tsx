@@ -3,6 +3,7 @@ import { HydrateClient, trpc } from "@/trpc/server";
 import { ErrorBoundary } from "react-error-boundary";
 import { loadProductFilters } from "@/modules/products/hooks/search-params";
 import { ProductListView } from "@/modules/products/ui/views/product-list-view";
+import { DEFAULT_LIMIT } from "@/constants";
 
 interface Props {
   params: Promise<{ category: string }>;
@@ -14,9 +15,10 @@ const Page = async ({ params, searchParams }: Props) => {
 
   const filters = await loadProductFilters(searchParams);
 
-  void trpc.products.getMany.prefetch({
-    categorySlug: category,
+  void trpc.products.getMany.prefetchInfinite({
     ...filters,
+    categorySlug: category,
+    limit: DEFAULT_LIMIT,
   });
 
   return (
