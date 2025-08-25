@@ -5,16 +5,15 @@ import { DEFAULT_BG_COLOR } from "@/modules/home/constants";
 interface SubcategoryMenuProps {
   category: CategorySingleOutput;
   isOpen: boolean;
-  position: { top: number; left: number };
 }
 
-export const SubcategoryMenu = ({ category, isOpen, position }: SubcategoryMenuProps) => {
+export const SubcategoryMenu = ({ category, isOpen }: SubcategoryMenuProps) => {
   if (!isOpen || !category.subcategories || category.subcategories.length === 0) return null;
 
   const backgroundColor = category.color || DEFAULT_BG_COLOR;
 
   return (
-    <div className='fixed z-100' style={{ top: position.top, left: position.left }}>
+    <div className='absolute z-100' style={{ top: "100%", left: 0 }}>
       <div className='h-3 w-60' />
       <div
         className='text-black w-60 rounded-md overflow-hidden border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[2px] -translate-y-[2px]'

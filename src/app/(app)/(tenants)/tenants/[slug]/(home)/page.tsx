@@ -3,28 +3,28 @@ import { loadProductFilters } from "@/modules/products/hooks/search-params";
 import { ProductListSkeleton } from "@/modules/products/ui/components/product-list";
 import { ProductListView } from "@/modules/products/ui/views/product-list-view";
 import { HydrateClient, trpc } from "@/trpc/server";
-import { SearchParams } from "nuqs";
+import type { SearchParams } from "nuqs/server";
 import { ErrorBoundary } from "react-error-boundary";
 
 interface Props {
-  params: Promise<{ subcategory: string }>;
   searchParams: Promise<SearchParams>;
+  params: Promise<{ slug: string }>;
 }
 
-const Page = async ({ params, searchParams }: Props) => {
-  const { subcategory } = await params;
+const Page = async ({ searchParams, params }: Props) => {
+  const { slug } = await params;
   const filters = await loadProductFilters(searchParams);
 
   void trpc.products.getMany.prefetchInfinite({
     ...filters,
-    categorySlug: subcategory,
+    tenantSlug: slug,
     limit: DEFAULT_LIMIT,
   });
 
   return (
     <HydrateClient>
-      <ErrorBoundary fallback={<ProductListSkeleton />}>
-        <ProductListView category={subcategory} />
+      <ErrorBoundary fallback={<ProductListSkeleton narrowView />}>
+        <ProductListView tenantSlug={slug} narrowView />
       </ErrorBoundary>
     </HydrateClient>
   );
