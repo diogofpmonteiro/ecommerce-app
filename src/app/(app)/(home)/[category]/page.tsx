@@ -4,6 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { loadProductFilters } from "@/modules/products/hooks/search-params";
 import { ProductListView } from "@/modules/products/ui/views/product-list-view";
 import { DEFAULT_LIMIT } from "@/constants";
+import { ProductListSkeleton } from "@/modules/products/ui/components/product-list";
 
 interface Props {
   params: Promise<{ category: string }>;
@@ -23,7 +24,7 @@ const Page = async ({ params, searchParams }: Props) => {
 
   return (
     <HydrateClient>
-      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <ErrorBoundary fallback={<ProductListSkeleton />}>
         <ProductListView category={category} />
       </ErrorBoundary>
     </HydrateClient>
