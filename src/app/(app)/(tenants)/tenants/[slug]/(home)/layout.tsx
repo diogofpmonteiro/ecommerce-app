@@ -1,5 +1,5 @@
-import { Footer } from "@/modules/tenants/ui/components/Footer";
-import { Navbar, NavbarSkeleton } from "@/modules/tenants/ui/components/Navbar";
+import { Footer } from "@/modules/tenants/ui/components/footer";
+import { Navbar, NavbarSkeleton } from "@/modules/tenants/ui/components/navbar";
 import { HydrateClient, trpc } from "@/trpc/server";
 import { ErrorBoundary } from "react-error-boundary";
 
