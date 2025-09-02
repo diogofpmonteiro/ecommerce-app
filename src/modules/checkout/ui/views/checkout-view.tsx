@@ -55,6 +55,7 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
 
   // brute force to clear cart in case
   // product gets deleted in DB while it is in user cart
+  // maybe we can check this inside the purchase flow somewhere
   //   useEffect(() => {
   //     if (!error) return;
 
