@@ -29,7 +29,7 @@ export const SearchInput = ({ disabled }: SearchInputProps) => {
       </Button>
       {data?.user && (
         <Button asChild variant={"elevated"}>
-          <Link href={"/library"}>
+          <Link prefetch href={"/library"}>
             <BookmarkCheckIcon className='mr-2' />
             Library
           </Link>
