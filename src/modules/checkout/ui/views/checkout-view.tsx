@@ -10,6 +10,8 @@ import { InboxIcon, LoaderIcon } from "lucide-react";
 import { useCheckoutStates } from "../../hooks/use-checkout-states";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 
 interface Props {
   tenantSlug: string;
@@ -19,6 +21,7 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
   const router = useRouter();
   const [states, setStates] = useCheckoutStates();
   const { productIds, removeProduct, clearCart } = useCart(tenantSlug);
+  const queryClient = useQueryClient();
 
   const {
     data,
@@ -46,12 +49,14 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
 
   useEffect(() => {
     if (states.success) {
+      const queryKey = getQueryKey(trpc.library.getMany, undefined, "query");
       setStates({ success: false, cancel: false });
       clearCart();
-      // TODO: invalidate library
-      router.push("/products");
+      queryClient.invalidateQueries({ queryKey });
+
+      router.push("/library");
     }
-  }, [states.success, clearCart, router, setStates]);
+  }, [states.success, clearCart, router, setStates, queryClient]);
 
   // brute force to clear cart in case
   // product gets deleted in DB while it is in user cart
