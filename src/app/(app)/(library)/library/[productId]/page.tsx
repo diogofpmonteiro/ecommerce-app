@@ -13,6 +13,10 @@ const Page = async ({ params }: Props) => {
     productId,
   });
 
+  void trpc.reviews.getOne.prefetch({
+    productId,
+  });
+
   return (
     <HydrateClient>
       <ErrorBoundary fallback={<>Error loading library</>}>
