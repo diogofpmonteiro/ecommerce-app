@@ -27,6 +27,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      beforeNavLinks: ["@/components/stripe-verify#StripeVerify"],
+    },
   },
   // cookiePrefix: "ecomm-app", // we could add a cookie name prefix here
   collections: [Users, Media, Categories, Products, Tags, Tenants, Orders, Reviews],
