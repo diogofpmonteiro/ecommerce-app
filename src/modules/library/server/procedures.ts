@@ -91,6 +91,9 @@ export const libraryRouter = createTRPCRouter({
       const dataWithSummarizedReviews = await Promise.all(
         // we can use async safely inside of map due to promise.all,
         // we will use it to properly handle the promises
+
+        // consider optimizing the review fetching pattern to avoid n+1 queries,
+        // since for every loop we do a fetch
         productsData.docs.map(async (doc) => {
           const reviewsData = await ctx.payload.find({
             collection: "reviews",
