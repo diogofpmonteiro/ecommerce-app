@@ -76,5 +76,14 @@ export const Products: CollectionConfig = {
         description: "If checked, the product will not be visible to customers (archived)",
       },
     },
+    {
+      name: "isPrivate",
+      label: "Private",
+      defaultValue: false,
+      type: "checkbox",
+      admin: {
+        description: "If checked, the product will not be visible to customers (private)",
+      },
+    },
   ],
 };
