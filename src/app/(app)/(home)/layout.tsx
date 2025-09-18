@@ -12,15 +12,15 @@ export default function HomeLayout({ children }: HomeLayoutProps) {
   void trpc.categories.getMany.prefetch();
 
   return (
-    <HydrateClient>
-      <div className='flex flex-col min-h-screen'>
-        <Navbar />
+    <div className='flex flex-col min-h-screen'>
+      <Navbar />
+      <HydrateClient>
         <ErrorBoundary fallback={<SearchFiltersSkeleton />}>
           <SearchFilters />
         </ErrorBoundary>
-        <div className='flex-1 bg-[#f4f4f0]'>{children}</div>
-        <Footer />
-      </div>
-    </HydrateClient>
+      </HydrateClient>
+      <div className='flex-1 bg-[#f4f4f0]'>{children}</div>
+      <Footer />
+    </div>
   );
 }

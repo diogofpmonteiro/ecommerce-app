@@ -8,11 +8,11 @@ export const Products: CollectionConfig = {
     read: () => true,
     create: ({ req }) => {
       if (isSuperAdmin(req.user)) return true;
-
       // users can only create products if they have submitted their stripe details
       const tenant = req.user?.tenants?.[0]?.tenant as Tenant;
       return Boolean(tenant?.stripeDetailsSubmitted);
     },
+    delete: ({ req }) => isSuperAdmin(req.user),
   },
   admin: {
     useAsTitle: "name",
@@ -65,6 +65,15 @@ export const Products: CollectionConfig = {
       admin: {
         description:
           "Protected content only visible to costumers after purchase. Add product documentation, downloadable files, getting started guides and bonus materials. Supports Markdown formatting.",
+      },
+    },
+    {
+      name: "isArchived",
+      label: "Archive",
+      defaultValue: false,
+      type: "checkbox",
+      admin: {
+        description: "If checked, the product will not be visible to customers (archived)",
       },
     },
   ],
