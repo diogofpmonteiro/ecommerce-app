@@ -5,6 +5,9 @@ import Link from "next/link";
 import { trpc } from "@/trpc/client";
 import { ReviewSidebar } from "../components/review-sidebar";
 import { RichText } from "@payloadcms/richtext-lexical/react";
+import { HydrateClient } from "@/trpc/server";
+import { ReviewFormSkeleton } from "../components/review-form";
+import { ErrorBoundary } from "react-error-boundary";
 
 interface Props {
   productId: string;
@@ -17,7 +20,7 @@ export const ProductView = ({ productId }: Props) => {
 
   return (
     <div className='min-h-screen bg-white'>
-      <nav className='p-4 bg-[#F4F4F0] w-full border-b'>
+      <nav className='p-4 bg-[#151508] w-full border-b'>
         <Link prefetch href={"/library"} className='flex items-center gap-2'>
           <ArrowLeftIcon className='size-4' />
           <span className='text font-medium'>Back to Library</span>
@@ -32,7 +35,11 @@ export const ProductView = ({ productId }: Props) => {
         <div className='grid grid-cols-1 lg:grid-cols-7 gap-4 lg:gap-16'>
           <div className='lg:col-span-2 '>
             <div className='p-4 bg-white rounded-md border gap-4'>
-              <ReviewSidebar productId={productId} />
+              <HydrateClient>
+                <ErrorBoundary fallback={<ReviewFormSkeleton />}>
+                  <ReviewSidebar productId={productId} />
+                </ErrorBoundary>
+              </HydrateClient>
             </div>
           </div>
           <div className='lg:col-span-5'>
