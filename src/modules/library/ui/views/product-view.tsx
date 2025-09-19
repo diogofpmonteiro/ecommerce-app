@@ -4,6 +4,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { trpc } from "@/trpc/client";
 import { ReviewSidebar } from "../components/review-sidebar";
+import { RichText } from "@payloadcms/richtext-lexical/react";
 
 interface Props {
   productId: string;
@@ -36,7 +37,7 @@ export const ProductView = ({ productId }: Props) => {
           </div>
           <div className='lg:col-span-5'>
             {data?.content ? (
-              <p className='font-medium'>{data.content}</p>
+              <RichText data={data.content} />
             ) : (
               <p className='font-medium italic text-muted-foreground'>No special content</p>
             )}
