@@ -1,4 +1,4 @@
-import { ProductView } from "@/modules/products/ui/views/product-view";
+import { ProductView, ProductViewSkeleton } from "@/modules/products/ui/views/product-view";
 import { HydrateClient, trpc } from "@/trpc/server";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -15,7 +15,7 @@ const Page = async ({ params }: Props) => {
 
   return (
     <HydrateClient>
-      <ErrorBoundary fallback={<></>}>
+      <ErrorBoundary fallback={<ProductViewSkeleton />}>
         <ProductView productId={productId} tenantSlug={slug} />
       </ErrorBoundary>
     </HydrateClient>
